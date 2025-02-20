@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ChatMessage from './components/ChatMessage';
 import ChatInput from './components/ChatInput';
+import Navbar from './components/Navbar';
 import './App.css';
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <h1>React Chat</h1>
+        <h1>ChatMate</h1>
       </div>
       
       <div className="messages-container">
