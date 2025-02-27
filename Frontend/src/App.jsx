@@ -1,48 +1,41 @@
-import { useState } from 'react';
-import ChatMessage from './components/ChatMessage';
-import ChatInput from './components/ChatInput';
+import { useState,useEffect } from 'react';
 import Navbar from './components/Navbar';
+import { Routes, Route, Navigate } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/LoginPage";
+import SettingsPage from "./pages/SettingsPage";
+import ProfilePage from "./pages/ProfilePage";
+import { Loader } from 'lucide-react'
+import {useAuthStore} from './store/useAuthStore'
 import './App.css';
 
 function App() {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Welcome to the chat!",
-      timestamp: new Date().toISOString(),
-      isOwn: false
-    }
-  ]);
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore()
 
-  const handleSendMessage = (text) => {
-    const newMessage = {
-      id: messages.length + 1,
-      text,
-      timestamp: new Date().toISOString(),
-      isOwn: true
-    };
-    setMessages([...messages, newMessage]);
-  };
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth])
 
-  return (
-    <div className="chat-container">
-      <div className="chat-header">
-        <h1>ChatMate</h1>
-      </div>
-      
-      <div className="messages-container">
-        {messages.map((message) => (
-          <ChatMessage
-            key={message.id}
-            message={message}
-            isOwn={message.isOwn}
-          />
-        ))}
-      </div>
-      
-      <ChatInput onSendMessage={handleSendMessage} />
+  if (isCheckingAuth && !authUser) {
+    return (
+    <div className='flex items-center justify-center h-screen'>
+      <Loader className="size-10 animate-spin" />
     </div>
-  );
+  )}
+  
+  return (
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path='/' element={authUser ? <HomePage /> : <Navigate to="/login"/>} />
+        <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to="/"/>} />
+        <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to="/"/>} />
+        <Route path='/settings' element={<SettingsPage />} />
+        <Route path='/profile' element={authUser ? <ProfilePage /> : <Navigate to="/login"/>} />
+      </Routes>
+    </div>
+  )
 }
 
 export default App;
