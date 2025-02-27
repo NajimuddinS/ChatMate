@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import { useState } from 'react'
 import { MessagesSquare, User, Mail, Lock, EyeOff, Eye } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import { Link } from 'react-router-dom'
 
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -78,19 +79,29 @@ const SignUpPage = () => {
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <Lock className="size-5 text-base-content/40" />
                                     </div>
-                                    <input 
-                                    type={showPassword ? "text" : "password"} 
-                                    className={`input input-bordered w-full pl-10`} 
-                                    placeholder='●●●●●●●●●●●●' 
-                                    value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
-                                    <button type='button' className='absolute inset-y-0 right-0 pr-3 flex items-center' onClick={()=>setShowPassword(!showPassword)}>
-                                    {
-                                        showPassword ? (<EyeOff className='size-5 text-base-content/40'/>) :(<Eye className='size-5 text-base-content/40' />)
-                                    }
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        className={`input input-bordered w-full pl-10`}
+                                        placeholder='●●●●●●●●●●●●'
+                                        value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                                    <button type='button' className='absolute inset-y-0 right-0 pr-3 flex items-center' onClick={() => setShowPassword(!showPassword)}>
+                                        {
+                                            showPassword ? (<EyeOff className='size-5 text-base-content/40' />) : (<Eye className='size-5 text-base-content/40' />)
+                                        }
                                     </button>
                                 </div>
-                            </div>                            
+                            </div>
+
+                            <button type="submit" className="btn btn-primary w-full" disabled={isSigningUp}>
+                                {isSigningUp ? (<><Loader2 className="size-5 animate-spin" />Loading...</>) : ("Create Account")}
+                            </button>
                         </form>
+
+                        <div className='text-center'>
+                            <p className="text-base-content/60">Already have an account?{" "}
+                                <Link to="/login" className="link primary-link">Sign In</Link>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
