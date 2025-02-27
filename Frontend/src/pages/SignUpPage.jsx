@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import { useState } from 'react'
-import { MessagesSquare, User, Mail, Lock } from 'lucide-react';
+import { MessagesSquare, User, Mail, Lock, EyeOff, Eye } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
 const SignUpPage = () => {
@@ -82,7 +82,12 @@ const SignUpPage = () => {
                                     type={showPassword ? "text" : "password"} 
                                     className={`input input-bordered w-full pl-10`} 
                                     placeholder='●●●●●●●●●●●●' 
-                                    value={formData.password} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                                    value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                                    <button type='button' className='absolute inset-y-0 right-0 pr-3 flex items-center' onClick={()=>setShowPassword(!showPassword)}>
+                                    {
+                                        showPassword ? (<EyeOff className='size-5 text-base-content/40'/>) :(<Eye className='size-5 text-base-content/40' />)
+                                    }
+                                    </button>
                                 </div>
                             </div>                            
                         </form>
