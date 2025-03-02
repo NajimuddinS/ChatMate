@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
+import AIChatButton from "./AIChatButton";
+import AIChatToggle from "./AIChatToggle";
 import { Users } from "lucide-react";
 
 const Sidebar = () => {
@@ -41,6 +43,12 @@ const Sidebar = () => {
           <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
         </div>
       </div>
+      <div className="mt-2 px-3 hidden lg:block">
+        <AIChatToggle />
+      </div>
+      <div className="py-3 border-b border-base-300">
+        <AIChatButton />
+      </div>
 
       <div className="overflow-y-auto w-full py-3">
         {filteredUsers.map((user) => (
@@ -48,10 +56,10 @@ const Sidebar = () => {
             key={user._id}
             onClick={() => setSelectedUser(user)}
             className={`
-              w-full p-3 flex items-center gap-3
-              hover:bg-base-300 transition-colors
-              ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}
-            `}
+      w-full p-3 flex items-center gap-3
+      hover:bg-base-300 transition-colors
+      ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}
+    `}
           >
             <div className="relative mx-auto lg:mx-0">
               <img
@@ -59,10 +67,10 @@ const Sidebar = () => {
                 alt={user.name}
                 className="size-12 object-cover rounded-full"
               />
-              {onlineUsers.includes(user._id) && (
+              {(user.email === "ai@chatmate.com" || onlineUsers.includes(user._id)) && (
                 <span
                   className="absolute bottom-0 right-0 size-3 bg-green-500 
-                  rounded-full ring-2 ring-zinc-900"
+          rounded-full ring-2 ring-zinc-900"
                 />
               )}
             </div>
@@ -71,12 +79,11 @@ const Sidebar = () => {
             <div className="hidden lg:block text-left min-w-0">
               <div className="font-medium truncate">{user.fullName}</div>
               <div className="text-sm text-zinc-400">
-                {onlineUsers.includes(user._id) ? "Online" : "Offline"}
+                {user.email === "ai@chatmate.com" || onlineUsers.includes(user._id) ? "Online" : "Offline"}
               </div>
             </div>
           </button>
         ))}
-
         {filteredUsers.length === 0 && (
           <div className="text-center text-zinc-500 py-4">No online users</div>
         )}

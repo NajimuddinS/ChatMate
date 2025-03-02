@@ -20,9 +20,15 @@ const ChatHeader = () => {
           {/* User info */}
           <div>
             <h3 className="font-medium">{selectedUser.fullName}</h3>
+            {selectedUser.email === "ai@chatmate.com" && (
+              <div className="flex items-center gap-1">
+                <span className="badge badge-sm badge-primary">AI</span>
+              </div>
+            )}
             <p className="text-sm text-base-content/70">
-              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
+              {selectedUser.email === "ai@chatmate.com" || onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
             </p>
+
           </div>
         </div>
 
