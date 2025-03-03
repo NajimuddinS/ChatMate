@@ -21,10 +21,10 @@ Welcome to **ChatMate**, a real-time chat application built using the MERN stack
 
 ## Screenshots
 
-![ChatMate Screenshot 1](https://github.com/NajimuddinS/ChatMate/blob/main/screenshots/Screenshot1.png?raw=true)
+![ChatMate Screenshot 1](https://github.com/NajimuddinS/ChatMate/blob/main/Screenshots/Screenshot1.png?raw=true)
 *Figure 1: Login Page*
 
-![ChatMate Screenshot 2](https://github.com/NajimuddinS/ChatMate/blob/main/screenshots/Screenshot2.png?raw=true)
+![ChatMate Screenshot 2](https://github.com/NajimuddinS/ChatMate/blob/main/Screenshots/Screenshot2.png?raw=true)
 *Figure 2: Home Interface*
 
 ![ChatMate Screenshot 3](https://github.com/NajimuddinS/ChatMate/blob/main/Screenshots/ChatUI.png?raw=true)
