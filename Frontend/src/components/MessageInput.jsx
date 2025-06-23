@@ -21,6 +21,45 @@ const MessageInput = () => {
     }
   };
 
+  // Improved image compression function
+  const compressImage = (file, maxWidth = 1920, maxHeight = 1080, quality = 0.8) => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions
+        let { width, height } = img;
+        
+        if (width > maxWidth || height > maxHeight) {
+          const ratio = Math.min(maxWidth / width, maxHeight / height);
+          width *= ratio;
+          height *= ratio;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Convert to blob with specified quality
+        canvas.toBlob(
+          (blob) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+          },
+          'image/jpeg', // Convert all images to JPEG for consistency
+          quality
+        );
+      };
+      
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     
@@ -65,31 +104,56 @@ const MessageInput = () => {
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please select an image file");
+    // Validate file type - be more specific about supported formats
+    const supportedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!supportedTypes.includes(file.type.toLowerCase())) {
+      toast.error("Please select a valid image file (JPEG, PNG, GIF, WebP)");
       return;
     }
 
-    // Validate file size (e.g., 5MB limit)
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    // Initial file size check (increased limit)
+    const maxSize = 10 * 1024 * 1024; // 10MB initial limit
     if (file.size > maxSize) {
-      toast.error("Image size should be less than 5MB");
+      toast.error("Image size should be less than 10MB");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImagePreview(reader.result);
-    };
-    reader.onerror = () => {
-      toast.error("Failed to read image file");
-    };
-    reader.readAsDataURL(file);
+    try {
+      // Show loading state
+      setIsLoading(true);
+      
+      // Compress the image
+      const compressedDataUrl = await compressImage(file);
+      
+      // Check compressed size (base64 is ~33% larger than binary)
+      const compressedSize = (compressedDataUrl.length * 0.75); // Approximate binary size
+      const finalMaxSize = 5 * 1024 * 1024; // 5MB final limit
+      
+      if (compressedSize > finalMaxSize) {
+        // Try with lower quality
+        const moreCompressedDataUrl = await compressImage(file, 1280, 720, 0.6);
+        const moreCompressedSize = (moreCompressedDataUrl.length * 0.75);
+        
+        if (moreCompressedSize > finalMaxSize) {
+          toast.error("Image is too large even after compression. Please use a smaller image.");
+          return;
+        }
+        
+        setImagePreview(moreCompressedDataUrl);
+      } else {
+        setImagePreview(compressedDataUrl);
+      }
+      
+    } catch (error) {
+      console.error("Image processing error:", error);
+      toast.error("Failed to process image. Please try another image.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const removeImage = () => {
@@ -150,7 +214,7 @@ const MessageInput = () => {
           hidden
           ref={fileInputRef}
           onChange={handleImageChange}
-          accept="image/*"
+          accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
         />
 
         {/* Text Input */}

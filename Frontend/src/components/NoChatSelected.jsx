@@ -14,7 +14,7 @@ const NoChatSelected = () => {
               <MessageSquare className="w-8 h-8 text-primary " />
             </div>
           </div>
-        </div>
+        </div>  
 
         {/* Welcome Text */}
         <h2 className="text-2xl font-bold">Welcome to ChatMate!</h2>

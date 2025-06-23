@@ -40,6 +40,10 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+// In your main server file
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 server.listen(PORT, async () => {
   console.log("server is running on PORT:" + PORT);
   connectDB();
