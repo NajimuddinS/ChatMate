@@ -5,7 +5,7 @@ import { config } from "dotenv";
 config();
 
 const HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models/";
-const MODEL_NAME = "meta-llama/Llama-3.1-8B-Instruct"; // You can change this to any model you prefer
+const MODEL_NAME = "mistralai/Mixtral-8x7B-Instruct-v0.1"; // You can change this to any model you prefer
 
 // Check if the API key exists
 const API_KEY = process.env.HUGGING_FACE_API_KEY;
