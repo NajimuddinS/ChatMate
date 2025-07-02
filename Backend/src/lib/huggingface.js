@@ -5,7 +5,7 @@ import { config } from "dotenv";
 config();
 
 const HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models/";
-const MODEL_NAME = "meta-llama/Llama-2-13b-chat-hf"; // You can change this to any model you prefer
+const MODEL_NAME = "microsoft/DialoGPT-medium"; // You can change this to any model you prefer
 
 // Check if the API key exists
 const API_KEY = process.env.HUGGING_FACE_API_KEY;
