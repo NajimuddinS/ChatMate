@@ -5,6 +5,8 @@ import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const ChatContainer = () => {
   const {
@@ -109,7 +111,33 @@ const ChatContainer = () => {
                 )}
                 {message.text && (
                   <div className={`${isAIChat && message.senderId !== authUser._id ? 'whitespace-pre-wrap' : ''}`}>
-                    {message.text}
+                    {isAIChat && message.senderId !== authUser._id ? (
+                      <Markdown 
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          p: ({node, ...props}) => <div {...props} />, // Replace p with div
+                          code({node, inline, className, children, ...props}) {
+                            return inline ? (
+                              <code className="bg-neutral rounded px-1 py-0.5 text-sm">
+                                {children}
+                              </code>
+                            ) : (
+                              <div className="my-2"> {/* Wrap pre in div instead of p */}
+                                <pre className="bg-neutral rounded p-2 overflow-x-auto">
+                                  <code className={className} {...props}>
+                                    {children}
+                                  </code>
+                                </pre>
+                              </div>
+                            );
+                          }
+                        }}
+                      >
+                        {message.text}
+                      </Markdown>
+                    ) : (
+                      message.text
+                    )}
                   </div>
                 )}
               </div>
